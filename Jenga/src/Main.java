@@ -1,6 +1,6 @@
 
 import java.util.Scanner;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Main
 {
@@ -20,13 +20,10 @@ public class Main
 		
 		//The maximum number of layers is around 3*startHeight,
 		//so the total number of possibilities is at most the number
-		//of solutions of x1 + x2 + x3 + x4 = 3*startHeight.
+		//of solutions of x1 + x2 + x3 + x4 <= 3*startHeight.
+
 		
-		//Note that the top layer is determined by the lower layers, and that
-		//in practice, the number of possibilities will be significantly less
-		//than this upper bound.
-		
-		HashMap<JengaState, Boolean> saveWin = new HashMap<JengaState, Boolean>();
+		LinkedHashMap<JengaState, Boolean> saveWin = new LinkedHashMap<JengaState, Boolean>();
 		JengaState startState = new JengaState(startHeight);
 		if(findWin(startState, saveWin))
 		{
@@ -36,9 +33,16 @@ public class Main
 		{
 			System.out.println("Loss");
 		}
+		
+		System.out.println(saveWin.size());
+		/*for(JengaState checkState : saveWin.keySet())
+		{
+			checkState.printState();
+			System.out.println(saveWin.get(checkState));
+		}*/
 	}
 	
-	public static boolean findWin(JengaState currState, HashMap<JengaState, Boolean> saveWin)
+	public static boolean findWin(JengaState currState, LinkedHashMap<JengaState, Boolean> saveWin)
 	{
 		//First check our cache of positions we have already seen.
 		if(saveWin.containsKey(currState))
@@ -152,5 +156,46 @@ class JengaState
 		{
 			topLayer++;
 		}
+	}
+	
+	public void printState()
+	{
+		System.out.println("\n### New Jenga State ###");
+		System.out.println("Full layers: " + fullLayers);
+		System.out.println("Missing one side: " + missOneSide);
+		System.out.println("Missing both sides: " + missTwoSides);
+		System.out.println("Missing center: " + missCenter);
+		System.out.println("Top layer: " + topLayer);
+		System.out.println("Total moves: " + numMoves);
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof JengaState))
+			return false;
+		else
+		{
+			JengaState otherState = (JengaState) obj;
+			return((this.fullLayers == otherState.fullLayers)
+				&& (this.missCenter == otherState.missCenter)
+				&& (this.missOneSide == otherState.missOneSide)
+				&& (this.missTwoSides == otherState.missTwoSides));
+		}
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		//We'll only go up to an initial size of 50, so that the total number of
+		//layers is at most 150. Then the largest possible value is below 150^4,
+		//which still fits in a 32-bit integer.
+		int base = 151;
+		int result = fullLayers;
+		result = result*base + missCenter;
+		result = result*base + missOneSide;
+		result = result*base + missTwoSides;
+		
+		return result;
 	}
 }
