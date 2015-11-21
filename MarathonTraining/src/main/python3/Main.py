@@ -92,12 +92,12 @@ def main():
         end = time.time()
 
         with open('input' + str(t), 'w') as fh:
-            fh.write(str(N))
+            fh.write(str(N) + '\n')
             for i in range(N):
-                fh.write("{} {}".format(miles[i], prices[i]))
+                fh.write("{} {}\n".format(miles[i], prices[i]))
 
         with open('output' + str(t), 'w') as fh:
-            fh.write(str(min_cost))
+            fh.write(str(min_cost) + '\n')
 
         print("{} items: {}s with min cost {}".format(N, end - start, min_cost))
 
