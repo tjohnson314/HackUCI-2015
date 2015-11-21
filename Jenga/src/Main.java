@@ -22,19 +22,23 @@ public class Main
 		//so the total number of possibilities is at most the number
 		//of solutions of x1 + x2 + x3 + x4 <= 3*startHeight.
 
-		
-		LinkedHashMap<JengaState, Boolean> saveWin = new LinkedHashMap<JengaState, Boolean>();
-		JengaState startState = new JengaState(startHeight);
-		if(findWin(startState, saveWin))
+		//int maxHeight = 100;
+		//for(int startHeight = 1; startHeight < maxHeight; startHeight++)
 		{
-			System.out.println("Win");
+			//A linked hash map stores the order in which we added values, which is useful for debugging.
+			LinkedHashMap<JengaState, Boolean> saveWin = new LinkedHashMap<JengaState, Boolean>();
+			JengaState startState = new JengaState(startHeight);
+			if(findWin(startState, saveWin))
+			{
+				System.out.println("Win");
+			}
+			else
+			{
+				System.out.println("Loss");
+			}
+			
+			//System.out.println(saveWin.size());
 		}
-		else
-		{
-			System.out.println("Loss");
-		}
-		
-		System.out.println(saveWin.size());
 		/*for(JengaState checkState : saveWin.keySet())
 		{
 			checkState.printState();
