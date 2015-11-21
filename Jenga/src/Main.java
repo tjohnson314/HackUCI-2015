@@ -22,23 +22,20 @@ public class Main
 		//so the total number of possibilities is at most the number
 		//of solutions of x1 + x2 + x3 + x4 <= 3*startHeight.
 
-		//int maxHeight = 100;
-		//for(int startHeight = 1; startHeight < maxHeight; startHeight++)
+		//A linked hash map stores the order in which we added values, which is useful for debugging.
+		LinkedHashMap<JengaState, Boolean> saveWin = new LinkedHashMap<JengaState, Boolean>();
+		JengaState startState = new JengaState(startHeight);
+		if(findWin(startState, saveWin))
 		{
-			//A linked hash map stores the order in which we added values, which is useful for debugging.
-			LinkedHashMap<JengaState, Boolean> saveWin = new LinkedHashMap<JengaState, Boolean>();
-			JengaState startState = new JengaState(startHeight);
-			if(findWin(startState, saveWin))
-			{
-				System.out.println("Win");
-			}
-			else
-			{
-				System.out.println("Loss");
-			}
-			
-			//System.out.println(saveWin.size());
+			System.out.println("Win");
 		}
+		else
+		{
+			System.out.println("Loss");
+		}
+		
+		//System.out.println(saveWin.size());
+		
 		/*for(JengaState checkState : saveWin.keySet())
 		{
 			checkState.printState();
@@ -150,15 +147,18 @@ class JengaState
 	//Place a block back on the top layer.
 	public void addToTop()
 	{
-		//If we created a new layer, then we add back a full layer.
 		if(topLayer == 3)
 		{
 			topLayer = 1;
-			fullLayers++;
 		}
 		else
 		{
 			topLayer++;
+			//If we finished a new layer, then the layer below it becomes available.
+			if(topLayer == 3)
+			{
+				fullLayers++;
+			}
 		}
 	}
 	
