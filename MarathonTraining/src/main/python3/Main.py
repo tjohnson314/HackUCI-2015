@@ -87,7 +87,7 @@ def main():
         cache = collections.defaultdict(lambda: collections.defaultdict(lambda: sys.maxsize))
         N = np.random.randint(1, 6e2)
         miles = np.random.randint(1, 10, N).tolist()
-        prices = np.random.randint(1, 10, N).tolist()
+        prices = np.random.randint(1, 20, N).tolist()
         min_cost = min(f(N - 1, miles, prices, cache).values())
         end = time.time()
 
